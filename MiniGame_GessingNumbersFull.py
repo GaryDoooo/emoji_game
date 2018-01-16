@@ -5,48 +5,47 @@
 # line5= ' |___________________| '
 
 from terminaltables import SingleTable
-import subprocess as sp
-from numpy import random
-
-#print ('jadfksjkladfsjdfs')
+# import subprocess as sp
+import random
 
 def print_table(guessed_result):
-    newlist=[[1,2,3,4,5,6,7,8,9,10],guessed_result]
-    table=SingleTable(newlist)
+    newlist = [[1, 2, 3, 4, 5, 6, 7, 8, 9, 10], guessed_result]
+    table = SingleTable(newlist)
     table.inner_row_border = True
-    table.inner_heading_row_border=False
-    table.title="Number List"
+    table.inner_heading_row_border = False
+    table.title = "Number List"
     # sp.call("clear",shell=True)
     print(table.table)
+
 
 def guess_a_number():
     print ('HOW TO PLAY | GUESSING NUMBERS:')
     print (' - GUESS THE NUMBER')
     print (' - S = SMALL')
     print (' - L = LARGE')
-    guessed_result=[""]*10
-    number=random.randint(1,high=11)
+    guessed_result = [""] * 10
+    # randint in random includes start and stop two numbers.
+    number = random.randint(1, 10)
     for _ in range(3):
         print_table(guessed_result)
         try:
-            guess=int(input("Please Input Your Guess: "))
-            if guess<1 or guess >10:
+            guess = int(input("Please Input Your Guess: "))
+            if guess < 1 or guess > 10:
                 print("Lose one round. Please input an integer from 1 to 10.")
             elif guess < number:
                 print("Your guess is small.")
-                guessed_result[guess-1]="S"
+                guessed_result[guess - 1] = "S"
             elif guess > number:
                 print ('Try Agian(your guess is too large)')
-                guessed_result[guess-1]="L"
+                guessed_result[guess - 1] = "L"
             else:
                 print("You got it!")
                 return True
         except ValueError:
             print("Lose one round. Please input an integer from 1 to 10.")
-        
+
     return False
-        
-    
+
 
 def main():
     if guess_a_number():
@@ -54,5 +53,6 @@ def main():
     else:
         print("You loss.")
 
+
 if __name__ == "__main__":
-    main()    
+    main()

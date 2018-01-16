@@ -10,7 +10,7 @@ def login_screen():
         if yes_or_no():
             make_new_account()
     else:
-        password=getpass.getpass("Password:")
+        password=getpass.getpass("Password ( Your password will not show):")
         if password!=user.password:
             print("Username or password is wrong.")
             user=None

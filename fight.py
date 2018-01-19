@@ -51,8 +51,8 @@ def attack(attacker, target, attacker_att, target_att, target_HP):
     # damage = attack * min(1,attack/defense), critical double attack, the initial attack tuned by luck .
 
     dodge_rate = min(
-        0.9, 0.2 * target_att[3] / attacker_att[3] * target_att[4] / attacker_att[4])
-    critical_rate = min(0.7, 0.2 * attacker_att[4] / target_att[4])
+        0.85, 0.2 * target_att[3] / attacker_att[3] * target_att[4] / attacker_att[4])
+    critical_rate = min(0.65, 0.2 * attacker_att[4] / target_att[4])
     dodge = (randint(0, 100) < 100 * dodge_rate)
     critical = (randint(0, 100) < 100 * critical_rate)
     if dodge:
@@ -74,7 +74,7 @@ def attack(attacker, target, attacker_att, target_att, target_HP):
 
 def fight_start(p1_name="P1", p2_name="P2",
                 p1_att=[425, 225, 125, 55, 55],
-                p2_att=[100, 25, 55, 460, 160], pause_time=0.5):
+                p2_att=[150, 25, 55, 460, 160], pause_time=0.5):
     # player attrs: HP 0, attack 1, defense 2, speed 3, luck 4
     # speed decides attack frequency, each player has an accumulator, which reach each 200, the player will attack
     # HP is inputed HP*50

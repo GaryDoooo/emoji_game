@@ -12,12 +12,35 @@ class color:
     magenta = "\033[35m"
     cyan = "\033[36m"
 
+# Hello...... kids... I am back.... put down more lines 5 more in print damage. 5 more in print skip and 5 more in print lose..
+# You got it? .I am up stairs in my room. I am on the cloud.... |  Where are you?|   In BEDDDDDD????????
+# start working on more lines.... quick. |    You = Bossy  | en... so what???? :D
+# LOL I am watching you... you need type %s something... something...OK %s, T_T
+# you can leave these lines here... fun to look at in the future. when you grow up, you can understand how stupid you were... ^_______^
+# no need the space between %s and comma, Need 3 %s... the first one is attacker, second is target, 3rd one is the target. Jennifer is typing
+# Use some new words than "DOGED" did you spell dodge right? It's dodge not doge....
+# who is the lazy one on line 41? Jennifer is | period. Line 29 and 40 look good.   | Jennifer typed 40   | very smart.
+# we need more and more... KIDS are free labor to write codes! esp. stupid kids. | who is the lazy cursor on Line 42 now?Je what happen? I dont know...
+# IDK!!!!!! Let me try to bring them back... save... save... save... save... save your work.... 
+# libby on the ipad.? ipad is not so compatible to this website. Use the big big HP lappy.    |   ok | 
+# write a line like frozen... ice attack... and shock... lightning attack.. and kick butt? 
+# libby geting mouse for computer. 
+# and maybe throw a cake on someone's face? or poop? find some new words than DODGE.... nice... cake attack.. new chat aera
+
+# Throw a claymore. get a claymore from nowhere and threw it on to someone. 
+# quick finish this attack and we can test the new code. %s was libbied by %d HP (%d left)
+#I NEED COPY+ PASTE | you need finish that line. put them into one single line. need %s replace "someone...."
+# Are you sure "libbied"? you typed it!!!D!D!D!XD  ! Run IT EVERYBODY!
+# Finish the line    |   I'm board. ??? go to the bash window on the left.
 
 def print_damage(attacker="attacker_name", target="target_name", damage=0, HP_left=10):
     line = ["%s kicked %s, %s got hurted by %d HP (%d left).",
             "%s sprayed fire on %s, %s was burned by %d HP (%d left).",
             "%s zapped %s, %s took damage by %d HP (%d left).",
-            "%s bombed %s and %s took %d HP (%d left)."
+            "%s bombed %s and %s took %d HP (%d left).",
+            "%s pounced on %s, %s took %d HP (%d left).",
+            "%s kicked %s's buttt, %s is hurted by %d (%d left).",
+            "%s got a claymore from nowhere and threw it on to %s, %s was libbied by %d HP (%d left)."
             ]
     i = randint(0, len(line) - 1)
     print(line[i] % (attacker, target, target, damage, HP_left))
@@ -25,9 +48,11 @@ def print_damage(attacker="attacker_name", target="target_name", damage=0, HP_le
 
 def print_skip(attacker="attacker_name", target="target_name"):
     line = ["%s tried to kick %s, %s dodged.",
-            "%s tried to spray fire on %s, %s doged.",
-            "%s tried to zapp %s, %s doged it.",
-            "%s tried to bomb %s, %s doged."
+            "%s tried to spray fire on %s, %s dodged.",
+            "%s tried to zapp %s, %s dodged it.",
+            "%s tried to bomb %s, %s dodged.",
+            "%s tried to pounce on %s, %s dodged.",
+            "%s tried to kick %s butt, %s avoided the attack."
             ]
     i = randint(0, len(line) - 1)
     print(color.green + line[i] % (attacker, target, target) + color.default)
@@ -122,7 +147,7 @@ def fight_start(p1_name="P1", p2_name="P2",
 
 def main():
     # print_damage("P1", "P2", 3, 10)
-    fight_start(pause_time=0)
+    fight_start(pause_time=1)
 
 
 if __name__ == "__main__":

@@ -6,6 +6,7 @@ from account_manage import account, load_account
 from MiniGame_GessingNumbersFull import guess_a_number
 import os
 from press_any_key import press_any_key_to_continue
+from training_room import training_room
 
 
 def login():
@@ -22,7 +23,7 @@ def print_main_menu():
     # Always have the same step here. indent... keep them aligned the start position is minigame 1 word? yes.
     print ('V: Emoji Vending')
     print ('M: Minigames    ')
-    # print ('I: Inventory    ')
+    print ('T: Training Room    ')
     print ('S: Show Room    ')
     print ('E: Exit         ')
 
@@ -68,6 +69,8 @@ def main():
         if action == "s" or action == "S":
             print("\n\n")
             show_room()
+        if action == "t" or action == "T":
+            user = training_room(user)
 
 
 if __name__ == "__main__":

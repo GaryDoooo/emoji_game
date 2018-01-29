@@ -1,12 +1,6 @@
-# line1= '______________________'
-# line2= ' 1 2 3 4 5 6 7 8 9 10 '
-# line3= ' | | | | | | | | | | | '
-# line4= ' |                   | '
-# line5= ' |___________________| '
-
 from terminaltables import SingleTable
-# import subprocess as sp
 import random
+
 
 def print_table(guessed_result):
     newlist = [[1, 2, 3, 4, 5, 6, 7, 8, 9, 10], guessed_result]

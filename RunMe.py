@@ -3,7 +3,7 @@ from WelcomeSkin import welcome_print
 from vendingmachineskin import print_vending_machine
 from vendingmachineworks import print_inventory, vending
 from account_manage import account, load_account
-from MiniGame_GessingNumbersFull import guess_a_number
+from guess_numbers import guess_a_number
 import os
 from press_any_key import press_any_key_to_continue
 from training_room import training_room
@@ -23,12 +23,13 @@ def print_main_menu():
     # Always have the same step here. indent... keep them aligned the start position is minigame 1 word? yes.
     print ('V: Emoji Vending')
     print ('M: Minigames    ')
-    print ('T: Training Room    ')
+    print ('T: Training Tower    ')
     print ('S: Show Room    ')
     print ('E: Exit         ')
 
 
 def show_room():
+    user_account = account("init", "get rid of error msg.")
     emoji = ["-", "^_^", "T-T", "@_@", "@.@", "*-*", ":P"]
     print("You entered the show room. There is a list of users on the wall.")
     a = os.popen(

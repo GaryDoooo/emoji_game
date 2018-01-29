@@ -21,17 +21,18 @@ class color:
 # Use some new words than "DOGED" did you spell dodge right? It's dodge not doge....
 # who is the lazy one on line 41? Jennifer is | period. Line 29 and 40 look good.   | Jennifer typed 40   | very smart.
 # we need more and more... KIDS are free labor to write codes! esp. stupid kids. | who is the lazy cursor on Line 42 now?Je what happen? I dont know...
-# IDK!!!!!! Let me try to bring them back... save... save... save... save... save your work.... 
-# libby on the ipad.? ipad is not so compatible to this website. Use the big big HP lappy.    |   ok | 
-# write a line like frozen... ice attack... and shock... lightning attack.. and kick butt? 
-# libby geting mouse for computer. 
+# IDK!!!!!! Let me try to bring them back... save... save... save... save... save your work....
+# libby on the ipad.? ipad is not so compatible to this website. Use the big big HP lappy.    |   ok |
+# write a line like frozen... ice attack... and shock... lightning attack.. and kick butt?
+# libby geting mouse for computer.
 # and maybe throw a cake on someone's face? or poop? find some new words than DODGE.... nice... cake attack.. new chat aera
 
-# Throw a claymore. get a claymore from nowhere and threw it on to someone. 
+# Throw a claymore. get a claymore from nowhere and threw it on to someone.
 # quick finish this attack and we can test the new code. %s was libbied by %d HP (%d left)
-#I NEED COPY+ PASTE | you need finish that line. put them into one single line. need %s replace "someone...."
+# I NEED COPY+ PASTE | you need finish that line. put them into one single line. need %s replace "someone...."
 # Are you sure "libbied"? you typed it!!!D!D!D!XD  ! Run IT EVERYBODY!
 # Finish the line    |   I'm board. ??? go to the bash window on the left.
+
 
 def print_damage(attacker="attacker_name", target="target_name", damage=0, HP_left=10):
     line = ["%s kicked %s, %s got hurted by %d HP (%d left).",
@@ -109,7 +110,6 @@ def fight_start(p1_name="P1", p2_name="P2",
     accumulator1 = 0
     accumulator2 = 0
     while True:
-        sleep(pause_time)
         accumulator1 += p1_att[3]
         accumulator2 += p2_att[3]
         if accumulator1 > accumulator2:
@@ -117,12 +117,14 @@ def fight_start(p1_name="P1", p2_name="P2",
                 if accumulator1 >= 200:
                     accumulator1 -= 200
                     HP2 = attack(p1_name, p2_name, p1_att, p2_att, HP2)
+                    sleep(pause_time)
                     if HP2 <= 0:
                         print_lose(p2_name)
                         return 1  # return winner number.
                 if accumulator2 >= 200:
                     accumulator2 -= 200
                     HP1 = attack(p2_name, p1_name, p2_att, p1_att, HP1)
+                    sleep(pause_time)
                     if HP1 <= 0:
                         print_lose(p1_name)
                         return 2  # return winner number.
@@ -131,12 +133,14 @@ def fight_start(p1_name="P1", p2_name="P2",
                 if accumulator2 >= 200:
                     accumulator2 -= 200
                     HP1 = attack(p2_name, p1_name, p2_att, p1_att, HP1)
+                    sleep(pause_time)
                     if HP1 <= 0:
                         print_lose(p1_name)
                         return 2  # return winner number.
                 if accumulator1 >= 200:
                     accumulator1 -= 200
                     HP2 = attack(p1_name, p2_name, p1_att, p2_att, HP2)
+                    sleep(pause_time)
                     if HP2 <= 0:
                         print_lose(p2_name)
                         return 1  # return winner number.

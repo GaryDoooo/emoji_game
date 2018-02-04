@@ -1,4 +1,5 @@
 import sys
+import os 
 import tty
 import termios
 
@@ -119,6 +120,7 @@ def select_menu(menu_item,  # it's a list of menu item strs
     if len_menu == 0:
         return
     selected = 0
+    os.system('setterm -cursor off')
     for i in range(len(menu_item)):
         if i == selected:
             print(fgcolor.reset + selection_color + menu_item[i])
@@ -129,6 +131,7 @@ def select_menu(menu_item,  # it's a list of menu item strs
         key = direction_and_enter()
         if key == "enter":
             print(fgcolor.reset + cursor.down * (len_menu - selected))
+            os.system('setterm -cursor on')
             return selected
         elif key == "up" and selected > 0:
             selected -= 1

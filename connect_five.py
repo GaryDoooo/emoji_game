@@ -695,7 +695,7 @@ class searcher (object):
 #----------------------------------------------------------------------
 # main game
 #----------------------------------------------------------------------
-def gamemain():
+def gamemain(depth=2):
     b = chessboard()
     s = searcher()
     s.board = b.board()
@@ -710,11 +710,11 @@ def gamemain():
     undo = False
 
     # 设置难度
-    DEPTH = 3
+    DEPTH = depth
 
-    if len(sys.argv) > 1:
-        if sys.argv[1].lower() == 'hard':
-            DEPTH = 2
+    #if len(sys.argv) > 1:
+     #   if sys.argv[1].lower() == 'hard':
+      #      DEPTH = 2
 
     while 1:
         print('')
@@ -758,7 +758,7 @@ def gamemain():
                 print(b.dumps())
                 print('')
                 print('YOU WIN !!')
-                return 0
+                return 1
 
             print('robot is thinking now ...')
             score, row, col = s.search(2, DEPTH)

@@ -3,10 +3,10 @@ from WelcomeSkin import welcome_print
 from vendingmachineskin import print_vending_machine
 from vendingmachineworks import print_inventory, vending
 from account_manage import account, load_account
-from guess_numbers import guess_a_number
 import os
 import term_io  # press_any_key_to_continue
 from training_room import training_room
+from minigame_entry import minigame 
 
 
 def login():
@@ -53,7 +53,7 @@ def main():
         action = term_io.select_menu([
             " Emoji Vending ",
             "   Minigames   ",
-            "  Shrine Tower ",
+            " Ancient Tower ",
             "   Show Room   ",
             "   Exit Game   "])
         if action == 4:
@@ -64,14 +64,7 @@ def main():
                 user.points, price, emoji, user.emoji_you_have)
             user.save()
         if action == 1:
-            print(
-                "\n\n\nYou will gain 50 points if winning the game, but lose 5 points if failed.")
-            if guess_a_number():
-                user.points += 50
-            elif user.points >= 5:
-                user.points -= 5
-            user.save()
-            term_io.press_any_key_to_continue()
+            user=minigame(user)
         if action == 3:
             print("\n\n")
             show_room()

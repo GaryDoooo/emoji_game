@@ -21,37 +21,53 @@ def name_gen():
 
 
 def training_room(user):
+    print("You entered an ancient tower. You will meet spirit fighters with their emojis in the tower. You need beat them to move the every next level.")
+    print("You will receive a blessing at each five levels you clear. But be careful that if you lose a battle, you will lose your emojis in the team. So choose the team wisely.")
     level = 1
     while True:
-        print("\nYou come to the level %d of the training tower." % level)
-        print("The tower was built before history. It grows tall into the clouds. No one knows where it leads to.")
+        if level != 1:
+            if (level-1)%5==0:
+                print(term_io.fgcolor.green+"You come to a blessing spring. After you drink some water in the spring, you feel refreshed.")
+                print("(Technically, you received %d points.)"%(300*int(level/5))+term_io.fgcolor.reset)
+                user.points+=300*int(level/5)
+            else:
+                print(term_io.fgcolor.green+"You gained 10 points."+term_io.fgcolor.reset)
+                user.points+=10
+            user.save()
         trainer_name = name_gen()
-        print("The trainer in this level is %s." % trainer_name)
         trainer_team = [randint(1, 6), randint(1, 6), randint(1, 6)]
-        team.print_team(trainer_team)
-        print("\nNow pick your team to fight against %s." % trainer_name)
-        player_team = team.pick_team(user)
-        if len(player_team) == 3:
-            print("%s's team:" % trainer_name)
+        while True:
+            print("\nYou come to the level %d of the tower." % level)
+            print("The tower was built before history. It grows tall into the clouds. No one knows where it leads to.")
+            print("The trainer in this level is %s." % trainer_name)
             team.print_team(trainer_team)
-            print("Your team:")
-            team.print_team(player_team)
-            print("Start to fight?")
-            if term_io.y_or_n():
-                winner = fight_start(
-                    user.username, trainer_name,
-                    team.cal_att(player_team),
-                    team.cal_att(trainer_team))
-                if winner == 2:
-                    print(
-                        "You can't move to the next level, and have been sent back the to entance.")
+            print("\nNow pick your team to fight against %s." % trainer_name)
+            player_team = team.pick_team(user)
+            if len(player_team) == 3:
+                print("%s's team:" % trainer_name)
+                team.print_team(trainer_team)
+                print("Your team:")
+                team.print_team(player_team)
+                print("Start to fight?")
+                if term_io.y_or_n():
+                    winner = fight_start(
+                        user.username, trainer_name,
+                        team.cal_att(player_team),
+                        team.cal_att(trainer_team))
+                    if winner == 2:
+                        print(
+                            "You can't move to the next level, and have been sent back the to entance.")
+                        for team_member in player_team:
+                            user.emoji_you_have[team_member]-=1
+                            user.save()
+                        return user
+                    else:
+                        level += 1
+                        break
+            else:
+                print("Do you want to leave the tower?")
+                if term_io.y_or_n():
                     return user
-                else:
-                    level += 1
-        else:
-            print("Do you want to leave the tower?")
-            if term_io.y_or_n():
-                return user
 
 
 def main():

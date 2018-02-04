@@ -137,8 +137,8 @@ def status_update(player, HP, message, status, display, player_name=""):
             display.update_t1_hit(print_lose(player_name), 3)
         if player == 2:
             display.update_t2_hit(print_lose(player_name), 3)
-        display.close()
         ti.press_any_key_to_continue()
+        display.close()
 
 
 def print_damage(attacker="attacker_name", target="target_name", damage=0, HP_left=10):

@@ -1,16 +1,8 @@
 from random import randint
 from time import sleep
-
-
-class color:
-    default = "\033[39m"
-    black = " \033[30m"
-    red = "\033[31m"
-    green = "\033[32m"
-    Yellow = "\033[33m"
-    blue = "\033[34m"
-    magenta = "\033[35m"
-    cyan = "\033[36m"
+import term_io as ti
+import curses
+import math
 
 # Hello...... kids... I am back.... put down more lines 5 more in print damage. 5 more in print skip and 5 more in print lose..
 # You got it? .I am up stairs in my room. I am on the cloud.... |  Where are you?|   In BEDDDDDD????????
@@ -34,6 +26,121 @@ class color:
 # Finish the line    |   I'm board. ??? go to the bash window on the left.
 
 
+class status_screen:
+    def __init__(self, team1_name, team2_name, team1_HP, team2_HP, team1_status="", team2_status=""):
+        self.t1_name = team1_name
+        self.t2_name = team2_name
+        self.t1_full_HP = team1_HP
+        self.t2_full_HP = team2_HP
+
+        print(ti.delete.whole_screen)
+        stdscr = curses.initscr()
+        curses.cbreak()
+        curses.noecho()
+        stdscr.keypad(1)
+
+        curses.start_color()
+        curses.init_pair(1, curses.COLOR_YELLOW, curses.COLOR_BLACK)
+        curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
+        curses.init_pair(3, curses.COLOR_RED, curses.COLOR_RED)
+        curses.init_pair(4, curses.COLOR_BLUE, curses.COLOR_BLUE)
+        curses.init_pair(5, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
+        curses.init_pair(6, curses.COLOR_RED, curses.COLOR_BLACK)
+        curses.init_pair(7, curses.COLOR_WHITE, curses.COLOR_BLACK)
+
+        height, width = stdscr.getmaxyx()
+        middle = int(width / 2)
+
+        self.t1_status_win = curses.newwin(3, middle - 1, 0, 0)
+        self.t2_status_win = curses.newwin(
+            3, width - middle - 2, 0, middle + 1)
+        self.t1_HP_win = curses.newwin(2, middle - 1, 3, 0)
+        self.t2_HP_win = curses.newwin(2, width - middle - 2, 3, middle + 1)
+        self.t1_hit_win = curses.newwin(
+            min(height - 5 - 1, 40), middle - 2, 5, 0)
+        self.t2_hit_win = curses.newwin(
+            min(height - 6, 40), width - middle - 4, 5, middle + 2)
+        self.t1_hit_win.scrollok(True)
+        self.t2_hit_win.scrollok(True)
+
+        self.t1_status_win.addstr(team1_name + "\n", curses.color_pair(1))
+        self.t1_status_win.addstr(team1_status, curses.color_pair(2))
+        self.t2_status_win.addstr(team2_name + "\n", curses.color_pair(1))
+        self.t2_status_win.addstr(team2_status, curses.color_pair(2))
+        self.t1_status_win.refresh()
+        self.t2_status_win.refresh()
+
+        self.update_t1_HP(team1_HP)
+        self.update_t2_HP(team2_HP)
+
+    def close(self):
+        curses.endwin()
+
+    def update_t2_HP(self, HP):
+        full_bar = 15
+        red_bar = int(15 / self.t2_full_HP * HP + 0.5)
+        if HP > 0 and red_bar == 0:
+            red_bar = 1
+        blue_bar = full_bar - red_bar
+        self.t2_HP_win.clear()
+        self.t2_HP_win.addstr("HP: %d" % HP + "\n")
+        self.t2_HP_win.addstr("X" * red_bar, curses.color_pair(3))
+        self.t2_HP_win.addstr("X" * blue_bar, curses.color_pair(4))
+        self.t2_HP_win.refresh()
+
+    def update_t1_HP(self, HP):
+        full_bar = 15
+        red_bar = int(15 / self.t1_full_HP * HP + 0.5)
+        if HP > 0 and red_bar == 0:
+            red_bar = 1
+        blue_bar = full_bar - red_bar
+        self.t1_HP_win.clear()
+        self.t1_HP_win.addstr("HP: %d" % HP + "\n")
+        self.t1_HP_win.addstr("X" * red_bar, curses.color_pair(3))
+        self.t1_HP_win.addstr("X" * blue_bar, curses.color_pair(4))
+        self.t1_HP_win.refresh()
+
+    def update_t2_hit(self, message="", status=0):
+        # status: 0 normal, 1 citrical hit which is red, 2 green which is dodge, 3 is lose
+        if status == 0:
+            self.t2_hit_win.addstr(message + "\n")
+        elif status == 2:
+            self.t2_hit_win.addstr(message + "\n", curses.color_pair(2))
+        elif status == 1:
+            self.t2_hit_win.addstr(message + "\n", curses.color_pair(6))
+        elif status == 3:
+            self.t2_hit_win.addstr("\n" + message + "\n", curses.color_pair(5))
+        self.t2_hit_win.refresh()
+
+    def update_t1_hit(self, message="", status=0):
+        # status: 0 normal, 1 citrical hit which is red, 2 green which is dodge, 3 is lose
+        if status == 0:
+            self.t1_hit_win.addstr(message + "\n")
+        elif status == 2:
+            self.t1_hit_win.addstr(message + "\n", curses.color_pair(2))
+        elif status == 1:
+            self.t1_hit_win.addstr(message + "\n", curses.color_pair(6))
+        elif status == 3:
+            self.t1_hit_win.addstr("\n" + message + "\n", curses.color_pair(5))
+        self.t1_hit_win.refresh()
+
+
+def status_update(player, HP, message, status, display, player_name=""):
+    if player == 1:
+        display.update_t1_hit(message, status)
+        display.update_t1_HP(HP)
+    elif player == 2:
+        display.update_t2_hit(message, status)
+        display.update_t2_HP(HP)
+    if HP <= 0:
+        if player == 1:
+            display.update_t1_hit(print_lose(player_name), 3)
+        if player == 2:
+            display.update_t2_hit(print_lose(player_name), 3)
+        display.close()
+        ti.press_any_key_to_continue()
+
+
 def print_damage(attacker="attacker_name", target="target_name", damage=0, HP_left=10):
     line = ["%s kicked %s, %s got hurted by %d HP (%d left).",
             "%s sprayed fire on %s, %s was burned by %d HP (%d left).",
@@ -44,7 +151,7 @@ def print_damage(attacker="attacker_name", target="target_name", damage=0, HP_le
             "%s got a claymore from nowhere and threw it on to %s, %s was libbied by %d HP (%d left)."
             ]
     i = randint(0, len(line) - 1)
-    print(line[i] % (attacker, target, target, damage, HP_left))
+    return line[i] % (attacker, target, target, damage, HP_left)
 
 
 def print_skip(attacker="attacker_name", target="target_name"):
@@ -56,7 +163,7 @@ def print_skip(attacker="attacker_name", target="target_name"):
             "%s tried to kick %s butt, %s avoided the attack."
             ]
     i = randint(0, len(line) - 1)
-    print(color.green + line[i] % (attacker, target, target) + color.default)
+    return line[i] % (attacker, target, target)
 
 
 def print_lose(loser_name="target"):
@@ -67,7 +174,7 @@ def print_lose(loser_name="target"):
             "%s took out a piece of white sheet, and waving~~~ waving~~~"
             ]
     i = randint(0, len(line) - 1)
-    print("\n" + color.magenta + line[i] % (loser_name) + color.default)
+    return line[i] % (loser_name)
 
 
 def attack(attacker, target, attacker_att, target_att, target_HP):
@@ -81,21 +188,21 @@ def attack(attacker, target, attacker_att, target_att, target_HP):
     critical_rate = min(0.65, 0.2 * attacker_att[4] / target_att[4])
     dodge = (randint(0, 100) < 100 * dodge_rate)
     critical = (randint(0, 100) < 100 * critical_rate)
+    message = ""
+    status = 0
     if dodge:
-        print_skip(attacker, target)
-        return target_HP
+        return target_HP, print_skip(attacker, target), 2
     else:
         att = attacker_att[1] * (1 + randint(0, round(70 *
                                                       min(1, attacker_att[4] / target_att[4]))) / 100)
         if critical:
             att = att * 2
-            print(color.red + "Critical HIT: ", end="")
+            status = 1
 
         damage = att * min(1, attacker_att[1] / target_att[2])
         target_HP = max(0, target_HP - damage)
-        print_damage(attacker, target, damage, target_HP)
-        print(color.default, end="")
-        return target_HP
+        message = print_damage(attacker, target, damage, target_HP)
+        return target_HP, message, status
 
 
 def fight_start(p1_name="P1", p2_name="P2",
@@ -109,40 +216,48 @@ def fight_start(p1_name="P1", p2_name="P2",
     HP2 = p2_att[0] * 5
     accumulator1 = 0
     accumulator2 = 0
+    display = status_screen(p1_name, p2_name, HP1, HP2,
+                            "A=%d D=%d S=%d L=%d" % (
+                                p1_att[1], p1_att[2], p1_att[3], p1_att[4]),
+                            "A=%d D=%d S=%d L=%d" % (p2_att[1], p2_att[2], p2_att[3], p2_att[4]))
     while True:
-        accumulator1 += p1_att[3]
-        accumulator2 += p2_att[3]
+        accumulator1 += math.sqrt(p1_att[3])
+        accumulator2 += math.sqrt(p2_att[3])
         if accumulator1 > accumulator2:
             while accumulator1 >= 200 or accumulator2 >= 200:
                 if accumulator1 >= 200:
                     accumulator1 -= 200
-                    HP2 = attack(p1_name, p2_name, p1_att, p2_att, HP2)
+                    HP2, message, status = attack(
+                        p1_name, p2_name, p1_att, p2_att, HP2)
+                    status_update(2, HP2, message, status, display, p2_name)
                     sleep(pause_time)
                     if HP2 <= 0:
-                        print_lose(p2_name)
                         return 1  # return winner number.
                 if accumulator2 >= 200:
                     accumulator2 -= 200
-                    HP1 = attack(p2_name, p1_name, p2_att, p1_att, HP1)
+                    HP1, message, status = attack(
+                        p2_name, p1_name, p2_att, p1_att, HP1)
+                    status_update(1, HP1, message, status, display, p1_name)
                     sleep(pause_time)
                     if HP1 <= 0:
-                        print_lose(p1_name)
                         return 2  # return winner number.
         else:
             while accumulator2 >= 200 or accumulator1 >= 200:
                 if accumulator2 >= 200:
                     accumulator2 -= 200
-                    HP1 = attack(p2_name, p1_name, p2_att, p1_att, HP1)
+                    HP1, message, status = attack(
+                        p2_name, p1_name, p2_att, p1_att, HP1)
+                    status_update(1, HP1, message, status, display, p1_name)
                     sleep(pause_time)
                     if HP1 <= 0:
-                        print_lose(p1_name)
                         return 2  # return winner number.
                 if accumulator1 >= 200:
                     accumulator1 -= 200
-                    HP2 = attack(p1_name, p2_name, p1_att, p2_att, HP2)
+                    HP2, message, status = attack(
+                        p1_name, p2_name, p1_att, p2_att, HP2)
+                    status_update(2, HP2, message, status, display, p2_name)
                     sleep(pause_time)
                     if HP2 <= 0:
-                        print_lose(p2_name)
                         return 1  # return winner number.
 
     # hello i play more minigame bye  |    The fight is a mini game   |   damage= 'damage  |   I go ZZZZZZZZZ   |'
@@ -152,6 +267,12 @@ def fight_start(p1_name="P1", p2_name="P2",
 def main():
     # print_damage("P1", "P2", 3, 10)
     fight_start(pause_time=1)
+    #  display = status_screen("t1", "t2", 100, 200, "t1s", "t2s")
+    #  display.update_t1_HP(100)
+    #  for i in range(100, 1, -1):
+    #  display.update_t1_HP(i)
+    #  sleep(0.5)
+    #  display.close()
 
 
 if __name__ == "__main__":

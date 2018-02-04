@@ -5,7 +5,7 @@ from vendingmachineworks import print_inventory, vending
 from account_manage import account, load_account
 from guess_numbers import guess_a_number
 import os
-from press_any_key import press_any_key_to_continue
+import term_io  # press_any_key_to_continue
 from training_room import training_room
 
 
@@ -18,14 +18,14 @@ def login():
   # IM DONE!!!!
 
 
-def print_main_menu():
-    # print here. You can use print("v: vending xxxxx")go to figlet|im done
-    # Always have the same step here. indent... keep them aligned the start position is minigame 1 word? yes.
-    print ('V: Emoji Vending')
-    print ('M: Minigames    ')
-    print ('T: Training Tower    ')
-    print ('S: Show Room    ')
-    print ('E: Exit         ')
+#  def print_main_menu():
+    #  # print here. You can use print("v: vending xxxxx")go to figlet|im done
+    #  # Always have the same step here. indent... keep them aligned the start position is minigame 1 word? yes.
+    #  print ('V: Emoji Vending')
+    #  print ('M: Minigames    ')
+    #  print ('T: Training Tower    ')
+    #  print ('S: Show Room    ')
+    #  print ('E: Exit         ')
 
 
 def show_room():
@@ -38,7 +38,7 @@ def show_room():
         user_account = load_account(user)
         print_inventory(emoji, user_account.emoji_you_have,
                         title=user + "'s emoji")
-    press_any_key_to_continue()
+    term_io.press_any_key_to_continue()
 
 
 def main():
@@ -49,16 +49,21 @@ def main():
         print_vending_machine()
         print("You have %d points." % user.points)
         print_inventory(emoji, user.emoji_you_have)
-        print_main_menu()
-        action = input("Please select: ")
-        if action == "e" or action == "E":
+        print("\n--== Main Menu==--")
+        action = term_io.select_menu([
+            " Emoji Vending ",
+            "   Minigames   ",
+            "  Shrine Tower ",
+            "   Show Room   ",
+            "   Exit Game   "])
+        if action == 4:
             user.save()
             return
-        if action == "v" or action == "V":
+        if action == 0:
             user.points, user.emoji_you_have = vending(
                 user.points, price, emoji, user.emoji_you_have)
             user.save()
-        if action == "m" or action == "M":
+        if action == 1:
             print(
                 "\n\n\nYou will gain 50 points if winning the game, but lose 5 points if failed.")
             if guess_a_number():
@@ -66,11 +71,11 @@ def main():
             elif user.points >= 5:
                 user.points -= 5
             user.save()
-            press_any_key_to_continue()
-        if action == "s" or action == "S":
+            term_io.press_any_key_to_continue()
+        if action == 3:
             print("\n\n")
             show_room()
-        if action == "t" or action == "T":
+        if action == 2:
             user = training_room(user)
 
 

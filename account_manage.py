@@ -1,5 +1,5 @@
 import pickle
-from vendingmachineworks import yes_or_no
+from term_io import y_or_n as yes_or_no
 # import subprocess as sp
 import os
 import getpass

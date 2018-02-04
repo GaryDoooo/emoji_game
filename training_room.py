@@ -5,8 +5,8 @@ from random import randint
 from bs4 import BeautifulSoup
 import requests
 import re
-from vendingmachineworks import yes_or_no
 from fight import fight_start
+import term_io
 
 
 def name_gen():
@@ -37,7 +37,7 @@ def training_room(user):
             print("Your team:")
             team.print_team(player_team)
             print("Start to fight?")
-            if yes_or_no():
+            if term_io.y_or_n():
                 winner = fight_start(
                     user.username, trainer_name,
                     team.cal_att(player_team),
@@ -50,7 +50,7 @@ def training_room(user):
                     level += 1
         else:
             print("Do you want to leave the tower?")
-            if yes_or_no():
+            if term_io.y_or_n():
                 return user
 
 

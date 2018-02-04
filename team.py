@@ -1,5 +1,6 @@
 from terminaltables import SingleTable
-from vendingmachineworks import print_inventory, yes_or_no
+from vendingmachineworks import print_inventory
+from term_io import y_or_n as yes_or_no
 from account_manage import account
 # from press_any_key import press_any_key_to_continue
 

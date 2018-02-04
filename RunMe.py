@@ -49,7 +49,7 @@ def main():
         print_vending_machine()
         print("You have %d points." % user.points)
         print_inventory(emoji, user.emoji_you_have)
-        print("\n--== Main Menu==--")
+        print("\n--== Main Menu ==--")
         action = term_io.select_menu([
             " Emoji Vending ",
             "   Minigames   ",

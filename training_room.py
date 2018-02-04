@@ -24,12 +24,12 @@ def training_room(user):
     level = 1
     while True:
         print("\nYou come to the level %d of the training tower." % level)
-        print("The tower was built before the history. It's tall into the the cloud. No one knows where it leads to.")
+        print("The tower was built before history. It grows tall into the clouds. No one knows where it leads to.")
         trainer_name = name_gen()
         print("The trainer in this level is %s." % trainer_name)
         trainer_team = [randint(1, 6), randint(1, 6), randint(1, 6)]
         team.print_team(trainer_team)
-        print("\nNow pick your team to fight with %s." % trainer_name)
+        print("\nNow pick your team to fight against %s." % trainer_name)
         player_team = team.pick_team(user)
         if len(player_team) == 3:
             print("%s's team:" % trainer_name)

@@ -91,7 +91,7 @@ def direction_and_enter():
         char = ord(getch())
         if char == 13:
             return "enter"
-        if char == 27 and ord(getch()) == 91:
+        elif char == 27 and ord(getch()) == 91:
             char = ord(getch())
             if char == 65:
                 return "up"
@@ -101,6 +101,14 @@ def direction_and_enter():
                 return "right"
             if char == 68:
                 return "left"
+        elif char == ord("w") or char == ord("W"):
+            return "up"
+        elif char == ord("S") or char == ord("s"):
+            return "down"
+        elif char == ord("a") or char == ord("A"):
+            return "left"
+        elif char == ord("d") or char == ord("D"):
+            return "right"
 
 
 def select_menu(menu_item,  # it's a list of menu item strs

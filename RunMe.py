@@ -56,7 +56,7 @@ def main():
             "   Minigames   ",
             " Ancient Tower ",
             "   Show Room   ",
-            "   Chat Room   ",
+            " Message Board ",
             "   Exit Game   "])
         if action == 5:
             user.save()

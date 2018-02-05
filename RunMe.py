@@ -6,7 +6,8 @@ from account_manage import account, load_account
 import os
 import term_io  # press_any_key_to_continue
 from training_room import training_room
-from minigame_entry import minigame 
+from minigame_entry import minigame
+from chatroom import run_chatroom
 
 
 def login():
@@ -55,16 +56,19 @@ def main():
             "   Minigames   ",
             " Ancient Tower ",
             "   Show Room   ",
+            "   Chat Room   ",
             "   Exit Game   "])
-        if action == 4:
+        if action == 5:
             user.save()
             return
+        if action == 4:
+            run_chatroom(user.username)
         if action == 0:
             user.points, user.emoji_you_have = vending(
                 user.points, price, emoji, user.emoji_you_have)
             user.save()
         if action == 1:
-            user=minigame(user)
+            user = minigame(user)
         if action == 3:
             print("\n\n")
             show_room()

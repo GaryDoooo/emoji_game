@@ -16,6 +16,7 @@ class chatroom:
         curses.noecho()
         stdscr.keypad(1)
         curses.start_color()
+        stdscr.erase()
 
         height, width = stdscr.getmaxyx()
         self.running = True
@@ -68,10 +69,14 @@ def run_chatroom(name="default"):
     square = "|"
     inputstr = ""
     post_message(name, "< Came to the message board. >")
+    # room.input_win.nodelay(1)
     while 1:
         room.input_win.clear()
         room.input_win.addstr(inputstr, curses.A_BOLD)
+        # room.input_win.refresh()
+        # time.sleep(0.2)
         room.input_win.addstr(square, curses.A_BLINK)
+        # time.sleep(0.2)
         room.input_win.refresh()
         char = room.input_win.getch()
         if char in [curses.KEY_ENTER, ord('\n')]:
@@ -86,7 +91,7 @@ def run_chatroom(name="default"):
             if cursor > 0:
                 cursor -= 1
                 inputstr = inputstr[:-1]
-        else:
+        elif char != -1:
             if cursor < room.input_width - 3:
                 if char == 27:
                     room.input_win.getch()

@@ -38,6 +38,7 @@ class status_screen:
         curses.cbreak()
         curses.noecho()
         stdscr.keypad(1)
+        stdscr.erase()
 
         curses.start_color()
         curses.init_pair(1, curses.COLOR_YELLOW, curses.COLOR_BLACK)
@@ -141,6 +142,22 @@ def status_update(player, HP, message, status, display, player_name=""):
         display.close()
 
 
+def run_away(p1_name, target_att, attacker_att, display):
+    success_rate = min(
+        0.25, 0.4 * math.sqrt(target_att[3] / attacker_att[3] * target_att[4] / attacker_att[4]))
+    success = (randint(0, 100) < 100 * success_rate)
+    for _ in range(100):
+        display.t1_hit_win.getch()
+    if success:
+        display.update_t1_hit(
+            "%s jumped out the fighting, and ran away with the emojis..." % p1_name, 3)
+        display.close()
+    else:
+        display.update_t1_hit(
+            "%s tried ran away but was kaught back to the fight." % p1_name, 3)
+    return success
+
+
 def print_damage(attacker="attacker_name", target="target_name", damage=0, HP_left=10):
     line = ["%s kicked %s, %s got hurted by %d HP (%d left).",
             "%s sprayed fire on %s, %s was burned by %d HP (%d left).",
@@ -184,7 +201,7 @@ def attack(attacker, target, attacker_att, target_att, target_HP):
     # damage = attack * min(1,attack/defense), critical double attack, the initial attack tuned by luck .
 
     dodge_rate = min(
-        0.85, 0.2 * math.sqrt(target_att[3] / attacker_att[3]  * target_att[4] / attacker_att[4]))
+        0.85, 0.2 * math.sqrt(target_att[3] / attacker_att[3] * target_att[4] / attacker_att[4]))
     critical_rate = min(0.65, 0.2 * attacker_att[4] / target_att[4])
     dodge = (randint(0, 100) < 100 * dodge_rate)
     critical = (randint(0, 100) < 100 * critical_rate)
@@ -220,6 +237,7 @@ def fight_start(p1_name="P1", p2_name="P2",
                             "A=%d D=%d S=%d L=%d" % (
                                 p1_att[1], p1_att[2], p1_att[3], p1_att[4]),
                             "A=%d D=%d S=%d L=%d" % (p2_att[1], p2_att[2], p2_att[3], p2_att[4]))
+    display.t1_hit_win.nodelay(1)  # No delay on getch()
     while True:
         accumulator1 += math.sqrt(p1_att[3])
         accumulator2 += math.sqrt(p2_att[3])
@@ -231,6 +249,10 @@ def fight_start(p1_name="P1", p2_name="P2",
                         p1_name, p2_name, p1_att, p2_att, HP2)
                     status_update(2, HP2, message, status, display, p2_name)
                     sleep(pause_time)
+                    char = display.t1_hit_win.getch()
+                    if char == ord("F") or char == ord("f"):
+                        if run_away(p1_name, p1_att, p2_att, display):
+                            return 0
                     if HP2 <= 0:
                         return 1  # return winner number.
                 if accumulator2 >= 200:

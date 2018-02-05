@@ -27,7 +27,7 @@ def run_connect_five():
 
 def minigame(user):
     while True:
-        print(term_io.fgcolor.black + term_io.bgcolor.yellow +
+        print(term_io.delete.whole_screen + term_io.fgcolor.black + term_io.bgcolor.yellow +
               "  Mini Game Room  " + term_io.fgcolor.reset)
         print("Winning a minigame will earn you points. But sometimes, losing it will also takes a few points from you.\n")
         action = term_io.select_menu([

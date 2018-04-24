@@ -8,6 +8,7 @@ import term_io  # press_any_key_to_continue
 from training_room import training_room
 from minigame_entry import minigame
 from chatroom import run_chatroom
+from library import library
 
 
 def login():
@@ -57,10 +58,13 @@ def main():
             " Ancient Tower ",
             "   Show Room   ",
             " Message Board ",
+            "    Library    ",
             "   Exit Game   "])
-        if action == 5:
+        if action == 6:
             user.save()
             return
+        if action ==5:
+            library()
         if action == 4:
             run_chatroom(user.username)
         if action == 0:

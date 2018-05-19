@@ -9,6 +9,8 @@ from training_room import training_room
 from minigame_entry import minigame
 from chatroom import run_chatroom
 from library import library
+from sell_emoji import selling
+from bank import bank_entry, bank_acc 
 
 
 def login():
@@ -54,30 +56,44 @@ def main():
         print("\n--== Main Menu ==--")
         action = term_io.select_menu([
             " Emoji Vending ",
+            "  Emoji Stand  ",
             "   Minigames   ",
             " Ancient Tower ",
             "   Show Room   ",
             " Message Board ",
             "    Library    ",
+            "     Bank      ",
             "   Exit Game   "])
-        if action == 6:
+        if action == 8:
             user.save()
             return
-        if action ==5:
+        if action ==6:
             library()
-        if action == 4:
+        if action == 5:
             run_chatroom(user.username)
         if action == 0:
             user.points, user.emoji_you_have = vending(
                 user.points, price, emoji, user.emoji_you_have)
             user.save()
-        if action == 1:
+        if action == 2:
             user = minigame(user)
-        if action == 3:
+        if action == 4:
             print("\n\n")
             show_room()
-        if action == 2:
+        if action == 3:
             user = training_room(user)
+        if action == 1:
+            selling_price=[_/2 for _ in price]
+            user.points, user.emoji_you_have = selling(
+                user.points,
+                selling_price, 
+                emoji, user.emoji_you_have
+                ) #selling price is some rate of buying price
+            user.save()
+        if action == 7:
+            user=bank_entry(user)
+            user.save()
+            
 
 
 if __name__ == "__main__":

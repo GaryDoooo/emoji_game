@@ -20,7 +20,7 @@ def selling(points, price, emoji, emoji_you_have):
     while True:
         print_welcome_msg()
         print_inventory(emoji, emoji_you_have)
-        message='You have %s points.'
+        message='You have %d points.'
         print(message%points)
         try:
             item_to_sell = int(

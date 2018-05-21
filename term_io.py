@@ -64,7 +64,43 @@ class delete:
     #  n=1 clears from cursor to start of line
     #  n=2 clears entire line
 
+def print_menu(menu_item,normal_color,
+                selection_color,x0,y0,selected):
+    for i in range(len(menu_item)):
+        move_cursor(x0,y0+i)
+        if i == selected:
+            print(selection_color + menu_item[i])
+        else:
+            print(normal_color + menu_item[i])
 
+def xy_menu(menu_item,  # it's a list of menu item strs
+            # a string of \033[xxxm color or format design
+            normal_color=fgcolor.reset+fgcolor.default,
+            selection_color=fgcolor.reset+format.reverse,
+            x0=1,y0=1):
+    len_menu = len(menu_item)
+    os.system('setterm -cursor off')
+    if len_menu == 0:
+        return
+    selected = 0
+    print_menu(menu_item,normal_color,selection_color,x0,y0,selected)
+    while True:
+        key = direction_and_enter()
+        if key == "enter":
+            print(bgcolor.reset+fgcolor.default)
+            for i in range(len(menu_item)):
+                move_cursor(x0,y0+i)
+                print(" "*len(menu_item[0]))
+            os.system('setterm -cursor on')
+            return selected
+        elif key == "up" and selected > 0:
+            selected -= 1
+            print_menu(menu_item,normal_color,selection_color,x0,y0,selected)
+        elif key == "down" and selected < (len_menu - 1):
+            selected += 1
+            print_menu(menu_item,normal_color,selection_color,x0,y0,selected)
+    
+    
 def move_cursor(x, y):
     # print("\033[%d;%dH" % (y, x), end="")
     sys.stdout.write(u"\u001b[%d;%dH" % (y, x))
@@ -115,7 +151,8 @@ def direction_and_enter():
 def select_menu(menu_item,  # it's a list of menu item strs
                 # a string of \033[xxxm color or format design
                 normal_color=fgcolor.default,
-                selection_color=format.reverse):
+                selection_color=format.reverse,
+                front_space = 0):
     len_menu = len(menu_item)
     if len_menu == 0:
         return
@@ -123,27 +160,27 @@ def select_menu(menu_item,  # it's a list of menu item strs
     os.system('setterm -cursor off')
     for i in range(len(menu_item)):
         if i == selected:
-            print(fgcolor.reset + selection_color + menu_item[i])
+            print(fgcolor.reset + " "*front_space+ selection_color + menu_item[i])
         else:
-            print(fgcolor.reset + normal_color + menu_item[i])
+            print(fgcolor.reset + " "*front_space+normal_color + menu_item[i])
     print(cursor.up * len_menu)
     while True:
         key = direction_and_enter()
         if key == "enter":
-            print(fgcolor.reset + cursor.down * (len_menu - selected))
+            print(fgcolor.reset + " "*front_space+cursor.down * (len_menu - selected))
             os.system('setterm -cursor on')
             return selected
         elif key == "up" and selected > 0:
             selected -= 1
             print(cursor.up * 2 + cursor.very_left +
-                  fgcolor.reset + selection_color + menu_item[selected])
-            print(fgcolor.reset + normal_color +
+                  fgcolor.reset + " "*front_space+selection_color + menu_item[selected])
+            print(fgcolor.reset + " "*front_space+normal_color +
                   menu_item[selected + 1] + cursor.up)
         elif key == "down" and selected < (len_menu - 1):
             selected += 1
             print(cursor.up + cursor.very_left +
-                  fgcolor.reset + normal_color + menu_item[selected - 1])
-            print(fgcolor.reset + selection_color + menu_item[selected])
+                  fgcolor.reset + " "*front_space+normal_color + menu_item[selected - 1])
+            print(fgcolor.reset + " "*front_space+selection_color + menu_item[selected])
 
 
 def y_or_n():

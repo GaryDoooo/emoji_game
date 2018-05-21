@@ -10,7 +10,8 @@ from minigame_entry import minigame
 from chatroom import run_chatroom
 from library import library
 from sell_emoji import selling
-from bank import bank_entry, bank_acc 
+from bank import bank_entry, bank_acc
+from dungeon_ctrl import portal_entry 
 
 
 def login():
@@ -44,16 +45,21 @@ def show_room():
                         title=user + "'s emoji")
     term_io.press_any_key_to_continue()
 
+def my_inventory(user,emoji):
+    print("\nYou have %d points." % user.points)
+    print_inventory(emoji, user.emoji_you_have)
+    term_io.press_any_key_to_continue() 
 
 def main():
     emoji = ["-", "^_^", "T-T", "@_@", "@.@", "*-*", ":P"]
     price = [0, 20, 60, 100, 150, 200, 250]
     user = login()
     while True:
-        print_vending_machine()
-        print("You have %d points." % user.points)
-        print_inventory(emoji, user.emoji_you_have)
-        print("\n--== Main Menu ==--")
+        # print_vending_machine()
+        # print("\n--== Main Menu ==--")
+        print(term_io.bgcolor.black+term_io.fgcolor.Yellow)
+        os.system("figlet Main Menu")
+        print(term_io.bgcolor.black+term_io.fgcolor.default)
         action = term_io.select_menu([
             " Emoji Vending ",
             "  Emoji Stand  ",
@@ -63,10 +69,21 @@ def main():
             " Message Board ",
             "    Library    ",
             "     Bank      ",
-            "   Exit Game   "])
-        if action == 8:
+            "  My Inventory ",
+            "  Magic Portal ",
+            "   Exit Game   "],
+            front_space = 15)
+        if action == 10:
             user.save()
             return
+        if action == 9:
+            print(term_io.delete.whole_screen +
+                "It is a portal standing on the ground formed with blue light. You can only see light inside it.")
+            print("You are not sure if stepping into it.")
+            if term_io.y_or_n():
+                user = portal_entry(user)
+        if action == 8:
+            my_inventory(user,emoji)
         if action ==6:
             library()
         if action == 5:
